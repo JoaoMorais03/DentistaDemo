@@ -4,10 +4,12 @@ struct ProfileSectionCard<Content: View>: View {
     let title: String
     let icon: String
     let content: Content
+    var accessibilityLabel: String? = nil
     
-    init(title: String, icon: String, @ViewBuilder content: () -> Content) {
+    init(title: String, icon: String, accessibilityLabel: String? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
         self.icon = icon
+        self.accessibilityLabel = accessibilityLabel
         self.content = content()
     }
     
@@ -23,10 +25,12 @@ struct ProfileSectionCard<Content: View>: View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(ColorTheme.primary)
                     )
+                    .accessibility(hidden: true)
                 
                 Text(title)
                     .font(.headline)
                     .foregroundColor(.primary)
+                    .accessibilityAddTraits(.isHeader)
                 
                 Spacer()
             }
@@ -42,21 +46,27 @@ struct ProfileSectionCard<Content: View>: View {
                 .padding(.bottom, 16)
         }
         .background(CardStyle.apply(to: Color.clear))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(accessibilityLabel ?? title)
     }
 }
 
 #Preview {
     VStack {
-        ProfileSectionCard(title: "Personal Information", icon: "person.fill") {
+        ProfileSectionCard(
+            title: NSLocalizedString("Personal Information", comment: "Section title"),
+            icon: "person.fill",
+            accessibilityLabel: NSLocalizedString("Personal Information section", comment: "Section accessibility label")
+        ) {
             VStack(spacing: 12) {
                 ProfileInfoRow(
                     icon: "person",
-                    title: "Name",
+                    title: NSLocalizedString("Name", comment: "Field label"),
                     value: "John Doe"
                 )
                 ProfileInfoRow(
                     icon: "envelope",
-                    title: "Email",
+                    title: NSLocalizedString("Email", comment: "Field label"),
                     value: "johndoe@example.com"
                 )
             }

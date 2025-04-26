@@ -1,47 +1,59 @@
 import SwiftUI
 
 struct AppointmentsView: View {
-    @State private var presentedAppointment: Appointment?
-    
+    @State private var isLoading = false // For future backend integration
+    @State private var appointments: [Appointment] = [] // Will be populated dynamically
+
     var body: some View {
-        ViewContainer(title: "My Appointments") {
-            VStack(spacing: 24) {
-                // Appointments list
-                appointmentsSection
-                
-                // Book button
-                NavigationLink(destination: BookAppointmentView()) {
-                    PrimaryButton(
-                        title: "Book New Appointment",
+        ViewContainer(title: NSLocalizedString("My Appointments", comment: "View title")) {
+            if isLoading {
+                VStack {
+                    Spacer()
+                    ProgressView(NSLocalizedString("Loading...", comment: "Loading indicator"))
+                        .progressViewStyle(CircularProgressViewStyle())
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, minHeight: 400)
+            } else {
+                VStack(spacing: 24) {
+                    appointmentsSection
+                    
+                    // Book button
+                    PrimaryButtonLink(
+                        title: NSLocalizedString("Book New Appointment", comment: "Button title"),
                         icon: "calendar.badge.plus",
-                        action: {}
+                        destination: BookAppointmentView(),
+                        accessibilityLabel: NSLocalizedString("Book New Appointment", comment: "Button accessibility label"),
+                        accessibilityHint: NSLocalizedString("Tap to schedule a new appointment", comment: "Button accessibility hint")
                     )
                     .padding(.top, 8)
                     .padding(.bottom, 16)
                 }
-                .buttonStyle(PlainButtonStyle())
             }
         }
-        .sheet(item: $presentedAppointment) { appointment in
-            NavigationView {
-                AppointmentDetailView(appointment: appointment)
+        .onAppear {
+            // Simulate backend fetch
+            isLoading = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                appointments = Appointment.exampleUpcoming
+                isLoading = false
             }
         }
     }
     
-    // MARK: - Appointments Section
     private var appointmentsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SectionHeader(title: "Upcoming Appointments")
-                .padding(.top, 16)
+            SectionHeader(title: NSLocalizedString("Upcoming Appointments", comment: "Section header"))
             
-            if Appointment.exampleUpcoming.isEmpty {
+            if appointments.isEmpty {
                 EmptyStateView(
                     icon: "calendar.badge.exclamationmark",
-                    title: "No upcoming appointments",
-                    message: "Tap the button below to schedule one",
+                    title: NSLocalizedString("No upcoming appointments", comment: "Empty state title"),
+                    message: NSLocalizedString("Tap the button below to schedule one", comment: "Empty state message"),
                     iconColor: ColorTheme.primary
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(NSLocalizedString("No upcoming appointments available", comment: "Accessibility label"))
             } else {
                 appointmentsList
             }
@@ -50,11 +62,16 @@ struct AppointmentsView: View {
     
     private var appointmentsList: some View {
         VStack(spacing: 16) {
-            ForEach(Appointment.exampleUpcoming) { appointment in
-                AppointmentCard(
-                    appointment: appointment,
-                    onTap: { presentedAppointment = appointment }
-                )
+            ForEach(appointments) { appointment in
+                NavigationLink(destination: AppointmentDetailView(appointment: appointment)) {
+                    AppointmentCard(
+                        appointment: appointment,
+                        showChevron: true
+                    )
+                    .accessibilityLabel(NSLocalizedString("Upcoming appointment with \(appointment.doctorName) on \(appointment.date)", comment: "Card accessibility label"))
+                    .accessibilityHint(NSLocalizedString("Tap to view details", comment: "Card accessibility hint"))
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }

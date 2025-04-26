@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @State private var patient = Patient.example
+    @State private var patient: Patient?
     @State private var isEditing = false
+    @State private var isLoading = false // For future backend integration
     @State private var editedName = ""
     @State private var editedEmail = ""
     @State private var editedPhone = ""
@@ -18,60 +19,67 @@ struct ProfileView: View {
     @State private var showingAlert = false
     @State private var alertMessage = ""
     
-    private let tabs = ["Personal", "Preferences"]
+    private let tabs = [
+        NSLocalizedString("Personal", comment: "Tab label"),
+        NSLocalizedString("Preferences", comment: "Tab label")
+    ]
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // Tab selector
-                tabSelector
-                
-                ScrollView {
-                    VStack(spacing: 24) {
-                        // Profile Header
-                        profileHeader
-                        
-                        // Content based on selected tab
-                        if selectedTab == 0 {
-                            personalInfoSection
-                        } else {
-                            preferencesSection
-                        }
-                        
-                        // Edit mode controls
-                        if isEditing {
-                            editControls
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 32)
-                }
-                .background(Color(.systemGroupedBackground))
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("My Profile")
-                        .font(.headline)
+        ViewContainer(
+            title: NSLocalizedString("My Profile", comment: "View title"),
+            trailingBarItem: !isEditing ? AnyView(
+                Button {
+                    startEditing()
+                } label: {
+                    Image(systemName: "pencil")
                         .foregroundColor(.primary)
+                        .accessibilityLabel(NSLocalizedString("Edit profile", comment: "Button accessibility label"))
+                        .accessibilityHint(NSLocalizedString("Tap to edit your profile information", comment: "Button accessibility hint"))
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if !isEditing {
-                        Button {
-                            startEditing()
-                        } label: {
-                            Image(systemName: "pencil")
-                                .foregroundColor(.primary)
-                        }
+            ) : AnyView(EmptyView())
+        ) {
+            VStack(spacing: 24) {
+                if isLoading {
+                    VStack {
+                        Spacer()
+                        ProgressView(NSLocalizedString("Loading...", comment: "Loading indicator"))
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 300)
+                } else {
+                    // Tab selector
+                    tabSelector
+                    
+                    // Profile Header
+                    profileHeader
+                    
+                    // Content based on selected tab
+                    if selectedTab == 0 {
+                        personalInfoSection
+                    } else {
+                        preferencesSection
+                    }
+                    
+                    // Edit mode controls
+                    if isEditing {
+                        editControls
                     }
                 }
             }
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text("Profile Updated"),
-                    message: Text(alertMessage),
-                    dismissButton: .default(Text("OK"))
-                )
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(
+                title: Text(NSLocalizedString("Profile Updated", comment: "Alert title")),
+                message: Text(alertMessage),
+                dismissButton: .default(Text(NSLocalizedString("OK", comment: "Alert dismiss button")))
+            )
+        }
+        .onAppear {
+            // Simulate backend fetch
+            isLoading = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                patient = Patient.example
+                isLoading = false
             }
         }
     }
@@ -95,6 +103,8 @@ struct ProfileView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
+                    .accessibilityLabel(tabs[index])
+                    .accessibilityAddTraits(selectedTab == index ? .isSelected : [])
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -111,13 +121,14 @@ struct ProfileView: View {
                 .frame(width: 80, height: 80)
                 .foregroundColor(ColorTheme.primary)
                 .padding(.top, 16)
+                .accessibilityHidden(true)
             
-            Text(isEditing ? editedName : patient.name)
+            Text(isEditing ? editedName : patient?.name ?? NSLocalizedString("User", comment: "Default user name"))
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
             
-            Text("Patient")
+            Text(NSLocalizedString("Patient", comment: "User role label"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
@@ -125,56 +136,177 @@ struct ProfileView: View {
         .frame(maxWidth: .infinity)
         .padding(20)
         .background(CardStyle.apply(to: Color.clear))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(NSLocalizedString("Profile information for \(patient?.name ?? "User")", comment: "Profile header accessibility label"))
     }
     
     // MARK: - Personal Info Section
     private var personalInfoSection: some View {
         VStack(spacing: 16) {
             // Personal Information card
-            ProfileSectionCard(title: "Personal Information", icon: "person.fill") {
+            ProfileSectionCard(
+                title: NSLocalizedString("Personal Information", comment: "Section title"),
+                icon: "person.fill"
+            ) {
                 if isEditing {
                     VStack(spacing: 12) {
-                        ProfileEditField(title: "Full Name", text: $editedName, icon: "person")
-                        ProfileEditField(title: "Email", text: $editedEmail, icon: "envelope")
-                        ProfileEditField(title: "Phone", text: $editedPhone, icon: "phone")
+                        ProfileEditField(
+                            title: NSLocalizedString("Full Name", comment: "Field label"),
+                            text: $editedName,
+                            icon: "person"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your full name", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("Email", comment: "Field label"),
+                            text: $editedEmail,
+                            icon: "envelope"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your email address", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("Phone", comment: "Field label"),
+                            text: $editedPhone,
+                            icon: "phone"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your phone number", comment: "Field accessibility hint"))
                     }
                 } else {
                     VStack(spacing: 12) {
-                        ProfileInfoRow(icon: "person", title: "Name", value: patient.name)
-                        ProfileInfoRow(icon: "envelope", title: "Email", value: patient.email)
-                        ProfileInfoRow(icon: "phone", title: "Phone", value: patient.phoneNumber)
-                        ProfileInfoRow(icon: "calendar", title: "Date of Birth", value: formatDate(patient.birthDate))
+                        ProfileInfoRow(
+                            icon: "person",
+                            title: NSLocalizedString("Name", comment: "Field label"),
+                            value: patient?.name ?? ""
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Name: \(patient?.name ?? "")", comment: "Field accessibility label"))
+                        
+                        ProfileInfoRow(
+                            icon: "envelope",
+                            title: NSLocalizedString("Email", comment: "Field label"),
+                            value: patient?.email ?? ""
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Email: \(patient?.email ?? "")", comment: "Field accessibility label"))
+                        
+                        ProfileInfoRow(
+                            icon: "phone",
+                            title: NSLocalizedString("Phone", comment: "Field label"),
+                            value: patient?.phoneNumber ?? ""
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Phone: \(patient?.phoneNumber ?? "")", comment: "Field accessibility label"))
+                        
+                        ProfileInfoRow(
+                            icon: "calendar",
+                            title: NSLocalizedString("Date of Birth", comment: "Field label"),
+                            value: formatDate(patient?.birthDate ?? Date())
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Date of Birth: \(formatDate(patient?.birthDate ?? Date()))", comment: "Field accessibility label"))
                     }
                 }
             }
             
             // Address card
-            ProfileSectionCard(title: "Address", icon: "house.fill") {
+            ProfileSectionCard(
+                title: NSLocalizedString("Address", comment: "Section title"),
+                icon: "house.fill"
+            ) {
                 if isEditing {
                     VStack(spacing: 12) {
-                        ProfileEditField(title: "Street", text: $editedStreet, icon: "mappin.and.ellipse")
-                        ProfileEditField(title: "City", text: $editedCity, icon: "building.2")
-                        ProfileEditField(title: "State", text: $editedState, icon: "map")
-                        ProfileEditField(title: "Zip Code", text: $editedZipCode, icon: "number")
+                        ProfileEditField(
+                            title: NSLocalizedString("Street", comment: "Field label"),
+                            text: $editedStreet,
+                            icon: "mappin.and.ellipse"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your street address", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("City", comment: "Field label"),
+                            text: $editedCity,
+                            icon: "building.2"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your city", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("State", comment: "Field label"),
+                            text: $editedState,
+                            icon: "map"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your state", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("Zip Code", comment: "Field label"),
+                            text: $editedZipCode,
+                            icon: "number"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter your zip code", comment: "Field accessibility hint"))
                     }
                 } else {
-                    ProfileInfoRow(icon: "mappin.and.ellipse", title: "Address", value: patient.address.formattedAddress())
+                    ProfileInfoRow(
+                        icon: "mappin.and.ellipse",
+                        title: NSLocalizedString("Address", comment: "Field label"),
+                        value: patient?.address.formattedAddress() ?? ""
+                    )
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(NSLocalizedString("Address: \(patient?.address.formattedAddress() ?? "")", comment: "Field accessibility label"))
                 }
             }
             
             // Emergency Contact card
-            ProfileSectionCard(title: "Emergency Contact", icon: "exclamationmark.shield.fill") {
+            ProfileSectionCard(
+                title: NSLocalizedString("Emergency Contact", comment: "Section title"),
+                icon: "exclamationmark.shield.fill"
+            ) {
                 if isEditing {
                     VStack(spacing: 12) {
-                        ProfileEditField(title: "Name", text: $editedEmergencyName, icon: "person.2")
-                        ProfileEditField(title: "Relationship", text: $editedEmergencyRelationship, icon: "person.2.circle")
-                        ProfileEditField(title: "Phone", text: $editedEmergencyPhone, icon: "phone.circle")
+                        ProfileEditField(
+                            title: NSLocalizedString("Name", comment: "Field label"),
+                            text: $editedEmergencyName,
+                            icon: "person.2"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter emergency contact name", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("Relationship", comment: "Field label"),
+                            text: $editedEmergencyRelationship,
+                            icon: "person.2.circle"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter relationship with emergency contact", comment: "Field accessibility hint"))
+                        
+                        ProfileEditField(
+                            title: NSLocalizedString("Phone", comment: "Field label"),
+                            text: $editedEmergencyPhone,
+                            icon: "phone.circle"
+                        )
+                        .accessibilityHint(NSLocalizedString("Enter emergency contact phone number", comment: "Field accessibility hint"))
                     }
                 } else {
                     VStack(spacing: 12) {
-                        ProfileInfoRow(icon: "person.2", title: "Name", value: patient.emergencyContact.name)
-                        ProfileInfoRow(icon: "person.2.circle", title: "Relationship", value: patient.emergencyContact.relationship)
-                        ProfileInfoRow(icon: "phone.circle", title: "Phone", value: patient.emergencyContact.phoneNumber)
+                        ProfileInfoRow(
+                            icon: "person.2",
+                            title: NSLocalizedString("Name", comment: "Field label"),
+                            value: patient?.emergencyContact.name ?? ""
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Emergency contact name: \(patient?.emergencyContact.name ?? "")", comment: "Field accessibility label"))
+                        
+                        ProfileInfoRow(
+                            icon: "person.2.circle",
+                            title: NSLocalizedString("Relationship", comment: "Field label"),
+                            value: patient?.emergencyContact.relationship ?? ""
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Emergency contact relationship: \(patient?.emergencyContact.relationship ?? "")", comment: "Field accessibility label"))
+                        
+                        ProfileInfoRow(
+                            icon: "phone.circle",
+                            title: NSLocalizedString("Phone", comment: "Field label"),
+                            value: patient?.emergencyContact.phoneNumber ?? ""
+                        )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(NSLocalizedString("Emergency contact phone: \(patient?.emergencyContact.phoneNumber ?? "")", comment: "Field accessibility label"))
                     }
                 }
             }
@@ -185,39 +317,50 @@ struct ProfileView: View {
     private var preferencesSection: some View {
         VStack(spacing: 16) {
             // Communication Preferences card
-            ProfileSectionCard(title: "Communication Preferences", icon: "bell.fill") {
+            ProfileSectionCard(
+                title: NSLocalizedString("Communication Preferences", comment: "Section title"),
+                icon: "bell.fill"
+            ) {
                 VStack(spacing: 8) {
                     ProfileToggleRow(
-                        title: "Appointment Reminders",
-                        isOn: .constant(patient.preferences.appointmentReminders),
+                        title: NSLocalizedString("Appointment Reminders", comment: "Preference toggle"),
+                        isOn: .constant(patient?.preferences.appointmentReminders ?? true),
                         icon: "calendar.badge.clock"
                     )
+                    .accessibilityHint(NSLocalizedString("Toggle to receive appointment reminders", comment: "Toggle accessibility hint"))
                     
                     Divider()
                     
                     ProfileToggleRow(
-                        title: "Email Notifications",
-                        isOn: .constant(patient.preferences.emailNotifications),
+                        title: NSLocalizedString("Email Notifications", comment: "Preference toggle"),
+                        isOn: .constant(patient?.preferences.emailNotifications ?? true),
                         icon: "envelope"
                     )
+                    .accessibilityHint(NSLocalizedString("Toggle to receive email notifications", comment: "Toggle accessibility hint"))
                     
                     Divider()
                     
                     ProfileToggleRow(
-                        title: "SMS Notifications",
-                        isOn: .constant(patient.preferences.smsNotifications),
+                        title: NSLocalizedString("SMS Notifications", comment: "Preference toggle"),
+                        isOn: .constant(patient?.preferences.smsNotifications ?? true),
                         icon: "message"
                     )
+                    .accessibilityHint(NSLocalizedString("Toggle to receive SMS notifications", comment: "Toggle accessibility hint"))
                 }
             }
             
             // Appointment Preferences card
-            ProfileSectionCard(title: "Appointment Preferences", icon: "clock.fill") {
+            ProfileSectionCard(
+                title: NSLocalizedString("Appointment Preferences", comment: "Section title"),
+                icon: "clock.fill"
+            ) {
                 ProfileInfoRow(
                     icon: "clock",
-                    title: "Preferred Time",
-                    value: patient.preferences.preferredAppointmentTime.rawValue
+                    title: NSLocalizedString("Preferred Time", comment: "Field label"),
+                    value: patient?.preferences.preferredAppointmentTime.rawValue ?? ""
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(NSLocalizedString("Preferred appointment time: \(patient?.preferences.preferredAppointmentTime.rawValue ?? "")", comment: "Field accessibility label"))
             }
         }
     }
@@ -228,7 +371,7 @@ struct ProfileView: View {
             Button(action: cancelEdit) {
                 HStack {
                     Image(systemName: "xmark.circle")
-                    Text("Cancel")
+                    Text(NSLocalizedString("Cancel", comment: "Button label"))
                 }
                 .font(.headline)
                 .foregroundColor(ColorTheme.error)
@@ -243,11 +386,13 @@ struct ProfileView: View {
                         )
                 )
             }
+            .accessibilityLabel(NSLocalizedString("Cancel editing", comment: "Button accessibility label"))
+            .accessibilityHint(NSLocalizedString("Tap to discard your changes", comment: "Button accessibility hint"))
             
             Button(action: saveChanges) {
                 HStack {
                     Image(systemName: "checkmark.circle")
-                    Text("Save")
+                    Text(NSLocalizedString("Save", comment: "Button label"))
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -259,12 +404,16 @@ struct ProfileView: View {
                 )
                 .shadow(color: ColorTheme.primary.opacity(0.3), radius: 5, x: 0, y: 2)
             }
+            .accessibilityLabel(NSLocalizedString("Save changes", comment: "Button accessibility label"))
+            .accessibilityHint(NSLocalizedString("Tap to save your profile changes", comment: "Button accessibility hint"))
         }
         .padding(.top, 20)
     }
     
     // MARK: - Helper Functions
     private func startEditing() {
+        guard let patient = patient else { return }
+        
         editedName = patient.name
         editedEmail = patient.email
         editedPhone = patient.phoneNumber
@@ -284,8 +433,9 @@ struct ProfileView: View {
     
     private func saveChanges() {
         // In a real app, this would update the database
+        // Future enhancement: Add validation before saving
         showingAlert = true
-        alertMessage = "Profile information updated successfully"
+        alertMessage = NSLocalizedString("Profile information updated successfully", comment: "Success message")
         isEditing = false
     }
     

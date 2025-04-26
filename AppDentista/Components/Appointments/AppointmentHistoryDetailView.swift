@@ -27,22 +27,7 @@ struct AppointmentHistoryDetailView: View {
         }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.primary)
-                }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text("Appointment History")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-            }
-        }
+        .navigationTitle(NSLocalizedString("Appointment History", comment: "Navigation title"))
     }
     
     // MARK: - Treatment Card
@@ -53,9 +38,10 @@ struct AppointmentHistoryDetailView: View {
                     .font(.system(size: 28))
                     .foregroundColor(ColorTheme.primary)
                     .frame(width: 40, height: 40)
+                    .accessibility(hidden: true)
                 
                 VStack(alignment: .leading) {
-                    Text("Treatment Type")
+                    Text(NSLocalizedString("Treatment Type", comment: "Label text"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Text(appointment.treatmentType.rawValue)
@@ -68,6 +54,8 @@ struct AppointmentHistoryDetailView: View {
             }
         }
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), appointment.treatmentType.rawValue))
     }
     
     // MARK: - Status Card
@@ -75,7 +63,7 @@ struct AppointmentHistoryDetailView: View {
         CardContainer {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Status")
+                    Text(NSLocalizedString("Status", comment: "Label text"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -87,26 +75,31 @@ struct AppointmentHistoryDetailView: View {
             }
         }
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(NSLocalizedString("Status: Completed", comment: "Accessibility label"))
     }
     
     // MARK: - Details Section
     private var detailsSection: some View {
         CardContainer {
             VStack(alignment: .leading, spacing: 16) {
-                SectionHeader(title: "Details")
+                SectionHeader(title: NSLocalizedString("Details", comment: "Section header"))
+                    .accessibilityAddTraits(.isHeader)
                 
                 DetailRow(
                     icon: "person.fill",
-                    title: "Doctor",
-                    value: appointment.doctorName
+                    title: NSLocalizedString("Doctor", comment: "Detail label"),
+                    value: appointment.doctorName,
+                    accessibilityLabel: String(format: NSLocalizedString("Doctor: %@", comment: "Accessibility label"), appointment.doctorName)
                 )
                 
                 Divider()
                 
                 DetailRow(
                     icon: "mappin.and.ellipse",
-                    title: "Location",
-                    value: appointment.location
+                    title: NSLocalizedString("Location", comment: "Detail label"),
+                    value: appointment.location,
+                    accessibilityLabel: String(format: NSLocalizedString("Location: %@", comment: "Accessibility label"), appointment.location)
                 )
             }
         }
@@ -117,7 +110,8 @@ struct AppointmentHistoryDetailView: View {
     private var notesSection: some View {
         CardContainer {
             VStack(alignment: .leading, spacing: 16) {
-                SectionHeader(title: "Notes")
+                SectionHeader(title: NSLocalizedString("Notes", comment: "Section header"))
+                    .accessibilityAddTraits(.isHeader)
                 
                 Text(appointment.notes)
                     .font(.body)
@@ -126,6 +120,8 @@ struct AppointmentHistoryDetailView: View {
             }
         }
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(String(format: NSLocalizedString("Notes: %@", comment: "Accessibility label"), appointment.notes))
     }
 }
 

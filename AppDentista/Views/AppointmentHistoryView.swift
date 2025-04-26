@@ -1,35 +1,46 @@
 import SwiftUI
 
 struct AppointmentHistoryView: View {
-    @State private var presentedHistoryAppointment: Appointment?
-    
+    @State private var isLoading = false // For future backend integration
+    @State private var appointments: [Appointment] = [] // Will be populated dynamically
+
     var body: some View {
-        ViewContainer(title: "Appointment History") {
-            VStack(spacing: 24) {
-                // History list
+        ViewContainer(title: NSLocalizedString("Appointment History", comment: "View title")) {
+            if isLoading {
+                VStack {
+                    Spacer()
+                    ProgressView(NSLocalizedString("Loading...", comment: "Loading indicator"))
+                        .progressViewStyle(CircularProgressViewStyle())
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, minHeight: 400)
+            } else {
                 historySection
             }
         }
-        .sheet(item: $presentedHistoryAppointment) { appointment in
-            NavigationView {
-                AppointmentHistoryDetailView(appointment: appointment)
+        .onAppear {
+            // Simulate backend fetch
+            isLoading = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                appointments = Appointment.examplePast
+                isLoading = false
             }
         }
     }
     
-    // MARK: - History Section
     private var historySection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SectionHeader(title: "Past Appointments")
-                .padding(.top, 16)
+            SectionHeader(title: NSLocalizedString("Past Appointments", comment: "Section header"))
             
-            if Appointment.examplePast.isEmpty {
+            if appointments.isEmpty {
                 EmptyStateView(
                     icon: "doc.text.magnifyingglass",
-                    title: "No past appointments",
-                    message: "Your appointment history will appear here",
+                    title: NSLocalizedString("No past appointments", comment: "Empty state title"),
+                    message: NSLocalizedString("Your appointment history will appear here", comment: "Empty state message"),
                     iconColor: ColorTheme.secondary
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(NSLocalizedString("No past appointments available", comment: "Accessibility label"))
             } else {
                 historyList
             }
@@ -38,16 +49,22 @@ struct AppointmentHistoryView: View {
     
     private var historyList: some View {
         VStack(spacing: 16) {
-            ForEach(Appointment.examplePast) { appointment in
-                AppointmentHistoryCard(
-                    appointment: appointment,
-                    onTap: { presentedHistoryAppointment = appointment }
-                )
+            ForEach(appointments) { appointment in
+                NavigationLink(destination: AppointmentHistoryDetailView(appointment: appointment)) {
+                    AppointmentHistoryCard(
+                        appointment: appointment
+                    )
+                    .accessibilityLabel(NSLocalizedString("Past appointment with \(appointment.doctorName) on \(appointment.date)", comment: "Card accessibility label"))
+                    .accessibilityHint(NSLocalizedString("Tap to view details", comment: "Card accessibility hint"))
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }
 }
 
+
 #Preview {
     AppointmentHistoryView()
-} 
+}
+

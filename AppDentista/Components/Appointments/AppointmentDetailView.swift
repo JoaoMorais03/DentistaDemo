@@ -31,26 +31,12 @@ struct AppointmentDetailView: View {
         }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.primary)
-                }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text("Appointment Details")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-            }
-        }
+        .navigationTitle(NSLocalizedString("Appointment Details", comment: "Navigation title"))
         .sheet(isPresented: $isRescheduling) {
             NavigationView {
                 RescheduleAppointmentView(appointment: appointment)
             }
+            .accessibilityLabel(NSLocalizedString("Reschedule appointment sheet", comment: "Accessibility label"))
         }
         .sheet(isPresented: $isCancelling) {
             NavigationView {
@@ -61,6 +47,7 @@ struct AppointmentDetailView: View {
                     }
                 )
             }
+            .accessibilityLabel(NSLocalizedString("Cancel appointment sheet", comment: "Accessibility label"))
         }
     }
     
@@ -72,9 +59,10 @@ struct AppointmentDetailView: View {
                     .font(.system(size: 28))
                     .foregroundColor(ColorTheme.primary)
                     .frame(width: 40, height: 40)
+                    .accessibility(hidden: true)
                 
                 VStack(alignment: .leading) {
-                    Text("Treatment Type")
+                    Text(NSLocalizedString("Treatment Type", comment: "Label text"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Text(appointment.treatmentType.rawValue)
@@ -87,26 +75,31 @@ struct AppointmentDetailView: View {
             }
         }
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), appointment.treatmentType.rawValue))
     }
     
     // MARK: - Details Section
     private var detailsSection: some View {
         CardContainer {
             VStack(alignment: .leading, spacing: 16) {
-                SectionHeader(title: "Details")
+                SectionHeader(title: NSLocalizedString("Details", comment: "Section header"))
+                    .accessibilityAddTraits(.isHeader)
                 
                 DetailRow(
                     icon: "person.fill",
-                    title: "Doctor",
-                    value: appointment.doctorName
+                    title: NSLocalizedString("Doctor", comment: "Detail label"),
+                    value: appointment.doctorName,
+                    accessibilityLabel: String(format: NSLocalizedString("Doctor: %@", comment: "Accessibility label"), appointment.doctorName)
                 )
                 
                 Divider()
                 
                 DetailRow(
                     icon: "mappin.and.ellipse",
-                    title: "Location",
-                    value: appointment.location
+                    title: NSLocalizedString("Location", comment: "Detail label"),
+                    value: appointment.location,
+                    accessibilityLabel: String(format: NSLocalizedString("Location: %@", comment: "Accessibility label"), appointment.location)
                 )
             }
         }
@@ -117,7 +110,8 @@ struct AppointmentDetailView: View {
     private var notesSection: some View {
         CardContainer {
             VStack(alignment: .leading, spacing: 16) {
-                SectionHeader(title: "Notes")
+                SectionHeader(title: NSLocalizedString("Notes", comment: "Section header"))
+                    .accessibilityAddTraits(.isHeader)
                 
                 Text(appointment.notes)
                     .font(.body)
@@ -126,14 +120,18 @@ struct AppointmentDetailView: View {
             }
         }
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(String(format: NSLocalizedString("Notes: %@", comment: "Accessibility label"), appointment.notes))
     }
     
     // MARK: - Action Buttons
     private var actionButtons: some View {
         VStack(spacing: 12) {
             PrimaryButton(
-                title: "Reschedule",
+                title: NSLocalizedString("Reschedule", comment: "Button title"),
                 icon: "calendar.badge.clock",
+                accessibilityLabel: NSLocalizedString("Reschedule appointment", comment: "Button accessibility label"),
+                accessibilityHint: NSLocalizedString("Double tap to change the date and time of your appointment", comment: "Button accessibility hint"),
                 action: { isRescheduling = true }
             )
             
@@ -142,7 +140,8 @@ struct AppointmentDetailView: View {
             } label: {
                 HStack {
                     Image(systemName: "xmark.circle")
-                    Text("Cancel Appointment")
+                        .accessibility(hidden: true)
+                    Text(NSLocalizedString("Cancel Appointment", comment: "Button title"))
                 }
                 .font(.headline)
                 .foregroundColor(ColorTheme.error)
@@ -157,6 +156,8 @@ struct AppointmentDetailView: View {
                         .stroke(ColorTheme.error, lineWidth: 1)
                 )
             }
+            .accessibilityLabel(NSLocalizedString("Cancel appointment", comment: "Button accessibility label"))
+            .accessibilityHint(NSLocalizedString("Double tap to cancel your appointment", comment: "Button accessibility hint"))
         }
         .padding([.horizontal, .bottom])
     }

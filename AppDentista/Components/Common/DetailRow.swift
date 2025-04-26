@@ -5,6 +5,7 @@ struct DetailRow: View {
     let icon: String
     let title: String
     let value: String
+    var accessibilityLabel: String? = nil
     
     var body: some View {
         HStack(spacing: 15) {
@@ -12,6 +13,7 @@ struct DetailRow: View {
                 .font(.body)
                 .foregroundColor(ColorTheme.primary)
                 .frame(width: 24)
+                .accessibility(hidden: true)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
@@ -24,6 +26,8 @@ struct DetailRow: View {
             
             Spacer()
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel ?? "\(title): \(value)")
     }
 }
 
@@ -31,19 +35,20 @@ struct DetailRow: View {
     VStack(spacing: 16) {
         DetailRow(
             icon: "calendar",
-            title: "Date",
-            value: "March 15, 2023"
+            title: NSLocalizedString("Date", comment: "Detail label"),
+            value: "March 15, 2023",
+            accessibilityLabel: NSLocalizedString("Date: March 15, 2023", comment: "Accessibility label")
         )
         
         DetailRow(
             icon: "clock",
-            title: "Time",
+            title: NSLocalizedString("Time", comment: "Detail label"),
             value: "10:30 AM"
         )
         
         DetailRow(
             icon: "person",
-            title: "Doctor",
+            title: NSLocalizedString("Doctor", comment: "Detail label"),
             value: "Dr. Sarah Johnson"
         )
     }

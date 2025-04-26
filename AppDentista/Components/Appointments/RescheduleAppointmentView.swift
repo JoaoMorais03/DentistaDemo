@@ -1,11 +1,22 @@
 import SwiftUI
 
-struct BookAppointmentView: View {
+struct RescheduleAppointmentView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var selectedDate = Date()
+    @Environment(\.dismiss) var dismiss
+    let appointment: Appointment
+    
+    @State private var selectedDate: Date
     @State private var selectedTimeSlot: Date?
-    @State private var selectedTreatment: Appointment.TreatmentType = .checkup
+    @State private var selectedTreatment: Appointment.TreatmentType
     @State private var showingConfirmation = false
+    
+    init(appointment: Appointment) {
+        self.appointment = appointment
+        // Initialize state variables with current appointment values
+        _selectedDate = State(initialValue: appointment.date)
+        _selectedTreatment = State(initialValue: appointment.treatmentType)
+        _selectedTimeSlot = State(initialValue: appointment.date)
+    }
     
     private let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
@@ -24,8 +35,8 @@ struct BookAppointmentView: View {
                 // Header
                 headerView
                 
-                // Treatment selection
-                treatmentSelectionView
+                // Treatment info
+                treatmentInfoView
                 
                 // Date selection
                 dateSelectionView
@@ -34,19 +45,31 @@ struct BookAppointmentView: View {
                 timeSelectionView
                 
                 // Confirm button
-                bookingButton
+                confirmButton
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
         }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
-        .navigationBarTitle("Book Appointment", displayMode: .inline)
+        .navigationBarTitle(NSLocalizedString("Reschedule", comment: "Navigation title"), displayMode: .inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundColor(.primary)
+                        .accessibilityLabel(NSLocalizedString("Close", comment: "Button accessibility label"))
+                }
+            }
+        }
         .alert(isPresented: $showingConfirmation) {
             Alert(
-                title: Text("Appointment Booked!"),
-                message: Text("Your \(selectedTreatment.rawValue) appointment has been booked for \(formattedDateTime)"),
-                dismissButton: .default(Text("OK")) {
-                    presentationMode.wrappedValue.dismiss()
+                title: Text(NSLocalizedString("Appointment Rescheduled!", comment: "Alert title")),
+                message: Text(String(format: NSLocalizedString("Your %@ appointment has been rescheduled for %@", comment: "Alert message"), selectedTreatment.rawValue, formattedDateTime)),
+                dismissButton: .default(Text(NSLocalizedString("OK", comment: "Alert button"))) {
+                    // Dismiss both the reschedule view and the detail view
+                    dismiss()
                 }
             )
         }
@@ -54,44 +77,49 @@ struct BookAppointmentView: View {
     
     // MARK: - Header View
     private var headerView: some View {
-        Text("Book Your Appointment")
+        Text(NSLocalizedString("Reschedule Your Appointment", comment: "Header title"))
             .font(.title2)
             .fontWeight(.bold)
             .foregroundColor(.primary)
             .padding(.top, 8)
+            .accessibilityAddTraits(.isHeader)
     }
     
-    // MARK: - Treatment Selection
-    private var treatmentSelectionView: some View {
+    // MARK: - Treatment Info
+    private var treatmentInfoView: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Select Treatment Type")
+            Text(NSLocalizedString("Treatment Type", comment: "Section title"))
                 .font(.headline)
                 .foregroundColor(.primary)
             
-            Picker("Treatment Type", selection: $selectedTreatment) {
-                ForEach(Appointment.TreatmentType.allCases, id: \.self) { treatment in
-                    Text(treatment.rawValue).tag(treatment)
-                }
+            HStack {
+                Image(systemName: iconName(for: selectedTreatment))
+                    .foregroundColor(ColorTheme.primary)
+                    .accessibility(hidden: true)
+                Text(selectedTreatment.rawValue)
+                    .foregroundColor(.primary)
+                Spacer()
             }
-            .pickerStyle(MenuPickerStyle())
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(Color(.systemBackground))
             )
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), selectedTreatment.rawValue))
         }
     }
     
     // MARK: - Date Selection
     private var dateSelectionView: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Select Date")
+            Text(NSLocalizedString("Select New Date", comment: "Section title"))
                 .font(.headline)
                 .foregroundColor(.primary)
             
             DatePicker(
-                "Select a date",
+                NSLocalizedString("Select a date", comment: "Date picker accessibility label"),
                 selection: $selectedDate,
                 in: dateRange,
                 displayedComponents: [.date]
@@ -102,13 +130,14 @@ struct BookAppointmentView: View {
                     .fill(Color(.systemBackground))
             )
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+            .accessibilityHint(NSLocalizedString("Double tap to open date picker", comment: "Accessibility hint"))
         }
     }
     
     // MARK: - Time Selection
     private var timeSelectionView: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Select Time")
+            Text(NSLocalizedString("Select New Time", comment: "Section title"))
                 .font(.headline)
                 .foregroundColor(.primary)
             
@@ -129,17 +158,20 @@ struct BookAppointmentView: View {
                             )
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .accessibilityLabel(String(format: NSLocalizedString("Time slot: %@", comment: "Time slot accessibility label"), formattedTime(timeSlot)))
+                    .accessibilityAddTraits(selectedTimeSlot == timeSlot ? [.isButton, .isSelected] : .isButton)
+                    .accessibilityHint(NSLocalizedString("Double tap to select this time slot", comment: "Accessibility hint"))
                 }
             }
         }
     }
     
-    // MARK: - Booking Button
-    private var bookingButton: some View {
+    // MARK: - Confirm Button
+    private var confirmButton: some View {
         Button {
             showingConfirmation = true
         } label: {
-            Text("Confirm Booking")
+            Text(NSLocalizedString("Confirm Reschedule", comment: "Button title"))
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding()
@@ -152,12 +184,14 @@ struct BookAppointmentView: View {
         }
         .disabled(selectedTimeSlot == nil)
         .padding(.top, 16)
+        .accessibilityLabel(NSLocalizedString("Confirm appointment reschedule", comment: "Button accessibility label"))
+        .accessibilityHint(NSLocalizedString("Double tap to confirm your new appointment time", comment: "Button accessibility hint"))
     }
     
-    // MARK: - Helper Properties & Methods
+    // MARK: - Helper Functions
     private var formattedDateTime: String {
         guard let timeSlot = selectedTimeSlot else { 
-            return "selected date and time" 
+            return NSLocalizedString("selected date and time", comment: "Default date time text") 
         }
         
         let formatter = DateFormatter()
@@ -171,10 +205,21 @@ struct BookAppointmentView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-}
-
-#Preview {
-    NavigationView {
-        BookAppointmentView()
+    
+    private func iconName(for treatmentType: Appointment.TreatmentType) -> String {
+        switch treatmentType {
+        case .checkup:
+            return "heart.text.square.fill"
+        case .cleaning:
+            return "sparkles"
+        case .filling:
+            return "seal.fill"
+        case .rootCanal:
+            return "waveform.path.ecg"
+        case .extraction:
+            return "scissors"
+        case .consultation:
+            return "text.bubble.fill"
+        }
     }
-} 
+}

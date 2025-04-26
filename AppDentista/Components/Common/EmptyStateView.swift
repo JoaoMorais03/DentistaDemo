@@ -5,6 +5,7 @@ struct EmptyStateView: View {
     let title: String
     let message: String
     let iconColor: Color
+    var accessibilityLabel: String? = nil
     
     var body: some View {
         VStack(spacing: 16) {
@@ -12,6 +13,7 @@ struct EmptyStateView: View {
                 .font(.system(size: 50))
                 .foregroundColor(iconColor.opacity(0.7))
                 .padding(.top, 24)
+                .accessibility(hidden: true)
             
             Text(title)
                 .font(.system(size: 16, weight: .medium))
@@ -29,6 +31,8 @@ struct EmptyStateView: View {
                 .fill(Color(.systemBackground))
         )
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel ?? "\(title). \(message)")
     }
 }
 
@@ -36,15 +40,16 @@ struct EmptyStateView: View {
     VStack {
         EmptyStateView(
             icon: "doc.text.magnifyingglass",
-            title: "No appointments",
-            message: "Your appointments will appear here",
-            iconColor: ColorTheme.primary
+            title: NSLocalizedString("No appointments", comment: "Empty state title"),
+            message: NSLocalizedString("Your appointments will appear here", comment: "Empty state message"),
+            iconColor: ColorTheme.primary,
+            accessibilityLabel: NSLocalizedString("No appointments available yet", comment: "Accessibility label")
         )
         
         EmptyStateView(
             icon: "calendar.badge.exclamationmark",
-            title: "No upcoming appointments",
-            message: "Tap the button below to schedule one",
+            title: NSLocalizedString("No upcoming appointments", comment: "Empty state title"),
+            message: NSLocalizedString("Tap the button below to schedule one", comment: "Empty state message"),
             iconColor: ColorTheme.secondary
         )
     }

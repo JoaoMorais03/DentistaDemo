@@ -19,18 +19,31 @@ struct ViewContainer<Content: View>: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                content
+            // Single ZStack covering entire view with background
+            ZStack {
+                // Background that fills entire screen
+                Color(.systemGroupedBackground)
+                    .edgesIgnoringSafeArea(.all)
+                
+                // ScrollView without its own background color
+                ScrollView {
+                    // Add top padding to the content to prevent it from being too close to the navigation bar
+                    VStack(spacing: 0) {
+                        content
+                    }
                     .padding(.horizontal, 20)
+                    .padding(.top, 8)
                     .padding(.bottom, 32)
+                }
+                .background(Color.clear) // Ensure ScrollView has no background
             }
-            .background(Color(.systemGroupedBackground))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(title)
                         .font(.headline)
                         .foregroundColor(.primary)
+                        .accessibilityAddTraits(.isHeader)
                 }
                 
                 if let trailing = trailingBarItem {
@@ -39,27 +52,8 @@ struct ViewContainer<Content: View>: View {
                     }
                 }
             }
+            .toolbarBackground(.visible, for: .navigationBar)
         }
+        .navigationViewStyle(StackNavigationViewStyle()) // Use consistent navigation style
     }
 }
-
-// Example usage:
-// ViewContainer(title: "My Profile") {
-//     VStack {
-//         // Your content here
-//     }
-// }
-
-// Example with trailing item:
-// ViewContainer(
-//     title: "Dashboard",
-//     trailingBarItem: AnyView(
-//         Button(action: {}) {
-//             Image(systemName: "bell")
-//         }
-//     )
-// ) {
-//     VStack {
-//         // Your content here
-//     }
-// } 

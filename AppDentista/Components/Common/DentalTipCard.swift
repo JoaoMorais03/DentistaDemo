@@ -5,6 +5,7 @@ struct DentalTipCard: View {
     let title: String
     let description: String
     let color: Color
+    var accessibilityLabel: String? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -17,6 +18,7 @@ struct DentalTipCard: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(color)
                     )
+                    .accessibility(hidden: true)
                 
                 Text(title)
                     .font(.headline)
@@ -29,9 +31,10 @@ struct DentalTipCard: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .lineLimit(3)
         }
-        .frame(width: 240)
         .padding(16)
         .background(CardStyle.apply(to: Color.clear))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel ?? "\(title) tip: \(description)")
     }
 }
 
@@ -39,16 +42,9 @@ struct DentalTipCard: View {
     ScrollView(.horizontal) {
         HStack(spacing: 16) {
             DentalTipCard(
-                icon: "toothbrush",
-                title: "Brushing",
-                description: "Brush teeth twice daily for 2 minutes using fluoride toothpaste",
-                color: ColorTheme.primary
-            )
-            
-            DentalTipCard(
                 icon: "slash.circle",
-                title: "Flossing",
-                description: "Floss once daily to clean between teeth where brushes can't reach",
+                title: NSLocalizedString("Flossing", comment: "Tip title"),
+                description: NSLocalizedString("Floss once daily to clean between teeth where brushes can't reach", comment: "Tip description"),
                 color: ColorTheme.secondary
             )
         }

@@ -1,105 +1,89 @@
 import SwiftUI
 
 struct DashboardView: View {
-    // Example patient data
-    let patient = Patient.example
-    @State private var showingNotification = false
-    
+    @State private var isLoading = false // For future backend integration
+    @State private var patient: Patient? // Will be populated dynamically
+    @State private var upcomingAppointment: Appointment? // Will be populated dynamically
+
     var body: some View {
         ViewContainer(
-            title: "",
-            trailingBarItem: AnyView(
-                Button(action: {
-                    showingNotification.toggle()
-                }) {
-                    Image(systemName: "bell")
-                        .foregroundColor(.primary)
-                }
-            )
+            title: ""
         ) {
-            VStack(spacing: 24) {
-                // Header
-                ProfileHeaderView(name: patient.name)
-                
-                // Appointment Card
-                upcomingAppointmentSection
-                
-                // Tips Section
-                dentalTipsSection
+            if isLoading {
+                VStack {
+                    Spacer()
+                    ProgressView(NSLocalizedString("Loading...", comment: "Loading indicator"))
+                        .progressViewStyle(CircularProgressViewStyle())
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, minHeight: 400)
+            } else {
+                VStack(spacing: 24) {
+                    ProfileHeaderView(name: patient?.name ?? NSLocalizedString("User", comment: "Default user name"))
+                        .accessibilityLabel(NSLocalizedString("Welcome, \(patient?.name ?? "User")", comment: "Header accessibility label"))
+                    
+                    upcomingAppointmentSection
+                    
+                    dentalTipsSection
+                }
             }
         }
-        .alert(isPresented: $showingNotification) {
-            Alert(
-                title: Text("Today's Appointment"),
-                message: Text("Dental cleaning at 2:00 PM. Please arrive 15 minutes early."),
-                dismissButton: .default(Text("OK"))
-            )
+        .onAppear {
+            // Simulate backend fetch
+            isLoading = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                patient = Patient.example
+                upcomingAppointment = Appointment.exampleUpcoming.first
+                isLoading = false
+            }
         }
     }
     
-    // MARK: - Upcoming Appointment Section
     private var upcomingAppointmentSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                SectionHeader(title: "Upcoming Appointment")
-                
-                Spacer()
-                
-                NavigationLink(destination: AppointmentsView()) {
-                    Text("View All")
-                        .font(.subheadline)
-                        .foregroundColor(ColorTheme.primary)
-                }
-            }
+            SectionHeader(title: NSLocalizedString("Upcoming Appointment", comment: "Section header"))
             
-            // Use the first example appointment from the model
-            if !Appointment.exampleUpcoming.isEmpty {
+            if let appointment = upcomingAppointment {
                 AppointmentCard(
-                    appointment: Appointment.exampleUpcoming[0],
-                    onTap: {}
+                    appointment: appointment,
+                    showChevron: false
                 )
+                .accessibilityLabel(NSLocalizedString("Upcoming appointment with \(appointment.doctorName) on \(appointment.date)", comment: "Card accessibility label"))
             } else {
-                // Fallback if no example appointments exist
                 EmptyStateView(
                     icon: "calendar.badge.exclamationmark",
-                    title: "No upcoming appointments",
-                    message: "Book an appointment to see it here",
+                    title: NSLocalizedString("No upcoming appointments", comment: "Empty state title"),
+                    message: NSLocalizedString("Book an appointment to see it here", comment: "Empty state message"),
                     iconColor: ColorTheme.primary
                 )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(NSLocalizedString("No upcoming appointments available", comment: "Accessibility label"))
             }
         }
     }
     
-    // MARK: - Dental Tips Section
     private var dentalTipsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SectionHeader(title: "Dental Care Tips")
+            SectionHeader(title: NSLocalizedString("Dental Care Tips", comment: "Section header"))
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    DentalTipCard(
-                        icon: "toothbrush",
-                        title: "Brushing",
-                        description: "Brush teeth twice daily for 2 minutes using fluoride toothpaste",
-                        color: ColorTheme.primary
-                    )
-                    
-                    DentalTipCard(
-                        icon: "slash.circle",
-                        title: "Flossing",
-                        description: "Floss once daily to clean between teeth where brushes can't reach",
-                        color: ColorTheme.secondary
-                    )
-                    
-                    DentalTipCard(
-                        icon: "cup.and.saucer.fill",
-                        title: "Diet",
-                        description: "Limit sugary foods and drinks to protect your teeth and gums",
-                        color: ColorTheme.accent
-                    )
-                }
-                .padding(.bottom, 8)
+            VStack(spacing: 16) {
+                DentalTipCard(
+                    icon: "slash.circle",
+                    title: NSLocalizedString("Flossing", comment: "Tip title"),
+                    description: NSLocalizedString("Floss once daily to clean between teeth where brushes can't reach", comment: "Tip description"),
+                    color: ColorTheme.secondary
+                )
+                .accessibilityLabel(NSLocalizedString("Flossing tip: Floss once daily to clean between teeth where brushes can't reach", comment: "Card accessibility label"))
+                
+                DentalTipCard(
+                    icon: "cup.and.saucer.fill",
+                    title: NSLocalizedString("Diet", comment: "Tip title"),
+                    description: NSLocalizedString("Limit sugary foods and drinks to protect your teeth and gums", comment: "Tip description"),
+                    color: ColorTheme.accent
+                )
+                .accessibilityLabel(NSLocalizedString("Diet tip: Limit sugary foods and drinks to protect your teeth and gums", comment: "Card accessibility label"))
             }
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -107,3 +91,4 @@ struct DashboardView: View {
 #Preview {
     DashboardView()
 }
+
