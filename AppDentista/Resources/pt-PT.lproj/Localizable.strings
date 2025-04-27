@@ -1,0 +1,200 @@
+/* ProfileView */
+"My Profile" = "Meu Perfil";
+"Personal" = "Pessoal";
+"Preferences" = "Preferências";
+"Edit profile" = "Editar perfil";
+"Tap to edit your profile information" = "Toque para editar as informações do seu perfil";
+"Loading..." = "Carregando...";
+"Profile Updated" = "Perfil Atualizado";
+"OK" = "OK";
+"User" = "Utilizador";
+"Patient" = "Paciente";
+"Profile information for %@" = "Informações de perfil para %@";
+"Personal Information" = "Informações Pessoais";
+"Full Name" = "Nome Completo";
+"Enter your full name" = "Insira seu nome completo";
+"Email" = "Email";
+"Enter your email address" = "Insira seu endereço de email";
+"Phone" = "Telefone";
+"Enter your phone number" = "Insira seu número de telefone";
+"Name" = "Nome";
+"Name: %@" = "Nome: %@";
+"Email: %@" = "Email: %@";
+"Phone: %@" = "Telefone: %@";
+"Date of Birth" = "Data de Nascimento";
+"Date of Birth: %@" = "Data de Nascimento: %@";
+"Address" = "Endereço";
+"Street" = "Rua";
+"Enter your street address" = "Insira o nome da sua rua";
+"City" = "Cidade";
+"Enter your city" = "Insira a sua cidade";
+"State" = "Distrito";
+"Enter your state" = "Insira o seu distrito";
+"Zip Code" = "Código Postal";
+"Enter your zip code" = "Insira o seu código postal";
+"Address: %@" = "Endereço: %@";
+"Emergency Contact" = "Contacto de Emergência";
+"Enter emergency contact name" = "Insira o nome do contacto de emergência";
+"Relationship" = "Parentesco";
+"Enter relationship with emergency contact" = "Insira o parentesco com o contacto de emergência";
+"Enter emergency contact phone number" = "Insira o número de telefone do contacto de emergência";
+"Emergency contact name: %@" = "Contacto de emergência: %@";
+"Emergency contact relationship: %@" = "Parentesco com contacto de emergência: %@";
+"Emergency contact phone: %@" = "Telefone do contacto de emergência: %@";
+"Communication Preferences" = "Preferências de Comunicação";
+"Appointment Reminders" = "Lembretes de Consultas";
+"Toggle to receive appointment reminders" = "Ativar para receber lembretes de consultas";
+"Email Notifications" = "Notificações por Email";
+"Toggle to receive email notifications" = "Ativar para receber notificações por email";
+"SMS Notifications" = "Notificações por SMS";
+"Toggle to receive SMS notifications" = "Ativar para receber notificações por SMS";
+"Appointment Preferences" = "Preferências de Consultas";
+"Preferred Time" = "Horário Preferido";
+"Preferred appointment time: %@" = "Horário preferido para consultas: %@";
+"Cancel" = "Cancelar";
+"Cancel editing" = "Cancelar edição";
+"Tap to discard your changes" = "Toque para descartar as alterações";
+"Save" = "Guardar";
+"Save changes" = "Guardar alterações";
+"Tap to save your profile changes" = "Toque para guardar as alterações ao perfil";
+"Profile information updated successfully" = "Informações do perfil atualizadas com sucesso";
+
+/* DashboardView */
+"Welcome, %@" = "Bem-vindo, %@";
+"Upcoming Appointment" = "Próxima Consulta";
+"Upcoming appointment with %@ on %@" = "Próxima consulta com %@ em %@";
+"No upcoming appointments" = "Sem consultas agendadas";
+"Book an appointment to see it here" = "Marque uma consulta para vê-la aqui";
+"No upcoming appointments available" = "Sem consultas agendadas disponíveis";
+"Dental Care Tips" = "Dicas de Saúde Oral";
+"Flossing" = "Uso do Fio Dental";
+"Flossing tip: Floss once daily to clean between teeth where brushes can't reach" = "Dica: Use fio dental uma vez por dia para limpar entre os dentes onde as escovas não alcançam";
+"Floss once daily to clean between teeth where brushes can't reach" = "Use fio dental uma vez por dia para limpar entre os dentes onde as escovas não alcançam";
+"Diet" = "Alimentação";
+"Diet tip: Limit sugary foods and drinks to protect your teeth and gums" = "Dica de alimentação: Limite alimentos e bebidas açucaradas para proteger seus dentes e gengivas";
+"Limit sugary foods and drinks to protect your teeth and gums" = "Limite alimentos e bebidas açucaradas para proteger seus dentes e gengivas";
+
+/* AppointmentsView */
+"My Appointments" = "Minhas Consultas";
+"Book New Appointment" = "Marcar Nova Consulta";
+"Tap to schedule a new appointment" = "Toque para agendar uma nova consulta";
+"Upcoming Appointments" = "Próximas Consultas";
+"Tap the button below to schedule one" = "Toque no botão abaixo para agendar uma";
+"Tap to view details" = "Toque para ver detalhes";
+
+/* AppointmentHistoryView */
+"Appointment History" = "Histórico de Consultas";
+"Past Appointments" = "Consultas Anteriores";
+"No past appointments" = "Sem consultas anteriores";
+"Your appointment history will appear here" = "O seu histórico de consultas aparecerá aqui";
+"No past appointments available" = "Sem histórico de consultas disponível";
+"Past appointment with %@ on %@" = "Consulta anterior com %@ em %@";
+
+/* Appointment Time Preferences */
+"Morning" = "Manhã";
+"Afternoon" = "Tarde";
+"Evening" = "Noite";
+
+/* Treatment Types */
+"Checkup" = "Consulta de Rotina";
+"Cleaning" = "Limpeza";
+"Filling" = "Obturação";
+"Root Canal" = "Tratamento de Canal";
+"Extraction" = "Extração";
+"Consultation" = "Consulta";
+
+/* Treatment Notes */
+"Regular dental checkup completed. No cavities found. Good oral hygiene maintained." = "Consulta de rotina realizada. Sem cáries encontradas. Boa higiene oral mantida.";
+"Full dental cleaning performed. Tartar and plaque removed. Teeth polished." = "Limpeza dentária completa realizada. Tártaro e placa removidos. Dentes polidos.";
+"Filling performed on upper right molar. Composite material used. Patient tolerated procedure well." = "Obturação realizada no molar superior direito. Material compósito utilizado. Paciente tolerou bem o procedimento.";
+"Root canal therapy completed on lower left premolar. Canal sealed. Temporary crown placed." = "Tratamento de canal concluído no pré-molar inferior esquerdo. Canal selado. Coroa temporária colocada.";
+"Extraction of wisdom tooth completed. No complications during procedure. Post-operative care instructions provided." = "Extração do dente do siso concluída. Sem complicações durante o procedimento. Instruções de cuidados pós-operatórios fornecidas.";
+"Initial consultation for orthodontic treatment. Discussed treatment options and costs." = "Consulta inicial para tratamento ortodôntico. Discutidas opções de tratamento e custos.";
+
+/* Date and Time Components */
+"Date" = "Data";
+"Time" = "Hora";
+"Select New Date" = "Selecionar Nova Data";
+"Select a date" = "Selecionar uma data";
+"Double tap to open date picker" = "Toque duas vezes para abrir o seletor de data";
+"Select Treatment Type" = "Selecionar Tipo de Tratamento";
+"Treatment Type" = "Tipo de Tratamento";
+"Double tap to select treatment type" = "Toque duas vezes para selecionar o tipo de tratamento";
+"Select Date" = "Selecionar Data";
+"Confirm Reschedule" = "Confirmar Reagendamento";
+"Confirm appointment reschedule" = "Confirmar reagendamento de consulta";
+"Double tap to confirm your new appointment time" = "Toque duas vezes para confirmar o novo horário da sua consulta";
+"selected date and time" = "data e hora selecionadas";
+"Appointment for %@ with %@ on %@" = "Consulta de %@ com %@ em %@";
+"Past appointment for %@ with %@ on %@. Completed." = "Consulta passada de %@ com %@ em %@. Concluída.";
+"Tap to view details" = "Toque para ver detalhes";
+
+/* Appointment Booking and Rescheduling */
+"Book Appointment" = "Marcar Consulta";
+"Book Your Appointment" = "Marque a Sua Consulta";
+"Appointment Booked!" = "Consulta Agendada!";
+"Your %@ appointment has been booked for %@" = "A sua consulta de %@ foi agendada para %@";
+"Reschedule Your Appointment" = "Reagende a Sua Consulta";
+"Appointment Rescheduled!" = "Consulta Reagendada!";
+"Your %@ appointment has been rescheduled for %@" = "A sua consulta de %@ foi reagendada para %@";
+"Status" = "Estado";
+"Status: Completed" = "Estado: Concluída";
+
+/* Additional UI Elements */
+"Welcome back!" = "Bem-vindo de volta!";
+"Hello" = "Olá";
+"Details" = "Detalhes";
+"Notes" = "Notas";
+"Reschedule" = "Reagendar";
+"Cancel Appointment" = "Cancelar Consulta";
+"Appointment Details" = "Detalhes da Consulta";
+"Doctor" = "Médico";
+"Doctor: %@" = "Médico: %@";
+"Location" = "Localização";
+"Location: %@" = "Localização: %@";
+"Notes: %@" = "Notas: %@";
+"Cancel appointment" = "Cancelar consulta";
+"Double tap to cancel your appointment" = "Toque duas vezes para cancelar a sua consulta";
+"Reschedule appointment" = "Reagendar consulta";
+"Double tap to change the date and time of your appointment" = "Toque duas vezes para alterar a data e hora da sua consulta";
+"Select Time" = "Selecionar Hora";
+"Select New Time" = "Selecionar Nova Hora";
+"Time slot: %@" = "Horário: %@";
+"Double tap to select this time slot" = "Toque duas vezes para selecionar este horário";
+"Close" = "Fechar";
+"Confirm Booking" = "Confirmar Agendamento";
+"Confirm appointment booking" = "Confirmar agendamento de consulta";
+"Double tap to book your appointment" = "Toque duas vezes para agendar a sua consulta";
+"Cancel appointment sheet" = "Folha de cancelamento de consulta";
+"Reschedule appointment sheet" = "Folha de reagendamento de consulta";
+"Treatment type: %@" = "Tipo de tratamento: %@";
+
+/* Welcome and Headers */
+"Hello, %@" = "Olá, %@";
+"Welcome to your dental care app" = "Bem-vindo à sua aplicação de cuidados dentários";
+"Welcome to DentistApp, %@" = "Bem-vindo ao Dentista, %@";
+"Personal Information section" = "Secção de Informações Pessoais";
+"Completed" = "Concluído";
+
+/* Cancellation View */
+"Schedule conflict" = "Conflito de horário";
+"Found another provider" = "Encontrei outro profissional";
+"No longer needed" = "Já não é necessário";
+"Feeling better" = "Estou a sentir-me melhor";
+"Financial reasons" = "Razões financeiras";
+"Other" = "Outro";
+"Warning: Cancel Appointment. This action cannot be undone." = "Aviso: Cancelar Consulta. Esta ação não pode ser desfeita.";
+"Cancellation Reason" = "Motivo do Cancelamento";
+"Please select a reason for cancellation" = "Por favor, selecione um motivo para o cancelamento";
+"Double tap to select this reason" = "Toque duas vezes para selecionar este motivo";
+"Please specify your reason" = "Por favor, especifique o seu motivo";
+"Double tap to enter custom cancellation reason" = "Toque duas vezes para inserir um motivo personalizado";
+"Confirm Cancellation" = "Confirmar Cancelamento";
+"Confirm appointment cancellation" = "Confirmar cancelamento da consulta";
+"Keep Appointment" = "Manter Consulta";
+"Keep appointment" = "Manter consulta";
+"Double tap to keep your appointment and go back" = "Toque duas vezes para manter a sua consulta e voltar";
+"This action cannot be undone" = "Esta ação não pode ser desfeita";
+"Appointment Cancelled" = "Consulta Cancelada";
+"Your appointment has been successfully cancelled." = "A sua consulta foi cancelada com sucesso.";
+"Treatment" = "Tratamento"; 

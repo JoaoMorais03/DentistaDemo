@@ -8,6 +8,7 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -16,6 +17,7 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -24,6 +26,7 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -32,6 +35,7 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .short
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -39,6 +43,7 @@ extension DateFormatter {
     static let dayOnly: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd"
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -46,6 +51,7 @@ extension DateFormatter {
     static let monthAbbreviated: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"
+        formatter.locale = Locale.current
         return formatter
     }()
 }

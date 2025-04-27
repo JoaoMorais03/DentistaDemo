@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct AppDentistaApp: App {
+    // Language will be determined by device settings
     var body: some Scene {
         WindowGroup {
             ContentView()

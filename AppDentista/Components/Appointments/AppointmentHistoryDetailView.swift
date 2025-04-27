@@ -44,7 +44,7 @@ struct AppointmentHistoryDetailView: View {
                     Text(NSLocalizedString("Treatment Type", comment: "Label text"))
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(appointment.treatmentType.rawValue)
+                    Text(appointment.treatmentType.localizedName)
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
@@ -55,7 +55,7 @@ struct AppointmentHistoryDetailView: View {
         }
         .padding(.horizontal)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), appointment.treatmentType.rawValue))
+        .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), appointment.treatmentType.localizedName))
     }
     
     // MARK: - Status Card

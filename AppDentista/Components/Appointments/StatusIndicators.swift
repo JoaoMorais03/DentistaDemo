@@ -6,7 +6,7 @@ struct CompletedStatusPill: View {
         HStack(spacing: 4) {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundColor(ColorTheme.success)
-            Text("Completed")
+            Text(NSLocalizedString("Completed", comment: "Status label"))
                 .font(.caption)
                 .bold()
                 .foregroundColor(ColorTheme.success)

@@ -13,7 +13,7 @@ struct AppointmentCard: View {
             
             // Info column
             VStack(alignment: .leading, spacing: 6) {
-                Text(appointment.treatmentType.rawValue)
+                Text(appointment.treatmentType.localizedName)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.primary)
                 
@@ -36,7 +36,7 @@ struct AppointmentCard: View {
         .background(CardStyle.apply(to: Color.clear))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel ?? 
-            NSLocalizedString("Appointment for \(appointment.treatmentType.rawValue) with \(appointment.doctorName) on \(appointment.date.formatted(date: .long, time: .shortened))", 
+            NSLocalizedString("Appointment for \(appointment.treatmentType.localizedName) with \(appointment.doctorName) on \(appointment.date.formatted(date: .long, time: .shortened))", 
                               comment: "Card accessibility label")
         )
         .if(accessibilityHint != nil) { view in

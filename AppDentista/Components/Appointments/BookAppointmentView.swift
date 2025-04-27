@@ -44,7 +44,7 @@ struct BookAppointmentView: View {
         .alert(isPresented: $showingConfirmation) {
             Alert(
                 title: Text(NSLocalizedString("Appointment Booked!", comment: "Alert title")),
-                message: Text(String(format: NSLocalizedString("Your %@ appointment has been booked for %@", comment: "Alert message"), selectedTreatment.rawValue, formattedDateTime)),
+                message: Text(String(format: NSLocalizedString("Your %@ appointment has been booked for %@", comment: "Alert message"), selectedTreatment.localizedName, formattedDateTime)),
                 dismissButton: .default(Text(NSLocalizedString("OK", comment: "Alert button"))) {
                     presentationMode.wrappedValue.dismiss()
                 }
@@ -71,7 +71,7 @@ struct BookAppointmentView: View {
             
             Picker(NSLocalizedString("Treatment Type", comment: "Picker title"), selection: $selectedTreatment) {
                 ForEach(Appointment.TreatmentType.allCases, id: \.self) { treatment in
-                    Text(treatment.rawValue).tag(treatment)
+                    Text(treatment.localizedName).tag(treatment)
                 }
             }
             .pickerStyle(MenuPickerStyle())

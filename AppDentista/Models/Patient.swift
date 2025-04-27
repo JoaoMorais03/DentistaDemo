@@ -37,24 +37,32 @@ struct Patient: Identifiable {
             case morning = "Morning"
             case afternoon = "Afternoon"
             case evening = "Evening"
+            
+            var localizedName: String {
+                switch self {
+                case .morning: return NSLocalizedString("Morning", comment: "Appointment time preference")
+                case .afternoon: return NSLocalizedString("Afternoon", comment: "Appointment time preference")
+                case .evening: return NSLocalizedString("Evening", comment: "Appointment time preference")
+                }
+            }
         }
     }
     
     static let example = Patient(
-        name: "Sarah Johnson",
-        email: "sarah.johnson@example.com",
-        phoneNumber: "(555) 123-4567",
+        name: "João Silva",
+        email: "joao.silva@exemplo.pt",
+        phoneNumber: "912 345 678",
         birthDate: Calendar.current.date(from: DateComponents(year: 1985, month: 6, day: 15))!,
         address: Address(
-            street: "123 Main Street",
-            city: "Portland",
-            state: "OR",
-            zipCode: "97201"
+            street: "Rua da Liberdade, 123",
+            city: "Lisboa",
+            state: "Lisboa",
+            zipCode: "1250-096"
         ),
         emergencyContact: EmergencyContact(
-            name: "John Johnson",
-            relationship: "Spouse",
-            phoneNumber: "(555) 987-6543"
+            name: "Maria Silva",
+            relationship: "Cônjuge",
+            phoneNumber: "913 987 654"
         ),
         preferences: Preferences(
             appointmentReminders: true,

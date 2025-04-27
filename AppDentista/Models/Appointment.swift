@@ -22,6 +22,17 @@ struct Appointment: Identifiable {
         case rootCanal = "Root Canal"
         case extraction = "Extraction"
         case consultation = "Consultation"
+        
+        var localizedName: String {
+            switch self {
+            case .checkup: return NSLocalizedString("Checkup", comment: "Treatment type")
+            case .cleaning: return NSLocalizedString("Cleaning", comment: "Treatment type")
+            case .filling: return NSLocalizedString("Filling", comment: "Treatment type")
+            case .rootCanal: return NSLocalizedString("Root Canal", comment: "Treatment type")
+            case .extraction: return NSLocalizedString("Extraction", comment: "Treatment type")
+            case .consultation: return NSLocalizedString("Consultation", comment: "Treatment type")
+            }
+        }
     }
     
     static let exampleUpcoming: [Appointment] = [
@@ -30,9 +41,9 @@ struct Appointment: Identifiable {
             date: Calendar.current.date(byAdding: .day, value: 3, to: Date())!,
             treatmentType: .checkup,
             isCompleted: false,
-            doctorName: "Dr. Emma Williams",
-            location: "Main Dental Clinic, Floor 2",
-            notes: "Please arrive 15 minutes before your appointment time. Remember to bring your insurance card and ID.",
+            doctorName: "Dr. Ana Sousa",
+            location: "Clínica Dental Principal, Piso 2",
+            notes: "Por favor, chegue 15 minutos antes da hora marcada. Lembre-se de trazer o seu cartão de seguro e identificação.",
             treatmentNotes: nil,
             needsFollowUp: false,
             followUpInDays: nil
@@ -42,9 +53,9 @@ struct Appointment: Identifiable {
             date: Calendar.current.date(byAdding: .day, value: 10, to: Date())!,
             treatmentType: .cleaning,
             isCompleted: false,
-            doctorName: "Dr. Emma Williams",
-            location: "Main Dental Clinic, Floor 2",
-            notes: "Please arrive 15 minutes before your appointment time. Remember to bring your insurance card and ID.",
+            doctorName: "Dr. Ana Sousa",
+            location: "Clínica Dental Principal, Piso 2",
+            notes: "Por favor, chegue 15 minutos antes da hora marcada. Lembre-se de trazer o seu cartão de seguro e identificação.",
             treatmentNotes: nil,
             needsFollowUp: false,
             followUpInDays: nil
@@ -57,10 +68,10 @@ struct Appointment: Identifiable {
             date: Calendar.current.date(byAdding: .day, value: -45, to: Date())!,
             treatmentType: .rootCanal,
             isCompleted: true,
-            doctorName: "Dr. Sarah Johnson",
-            location: "Main Dental Clinic, Floor 3",
-            notes: "Please arrive 15 minutes before your appointment time. Remember to bring your insurance card and ID.",
-            treatmentNotes: "Root canal therapy completed on lower left premolar. Canal sealed. Temporary crown placed.",
+            doctorName: "Dr. Manuel Costa",
+            location: "Clínica Dental Principal, Piso 3",
+            notes: "Por favor, chegue 15 minutos antes da hora marcada. Lembre-se de trazer o seu cartão de seguro e identificação.",
+            treatmentNotes: "Tratamento de canal concluído no pré-molar inferior esquerdo. Canal selado. Coroa temporária colocada.",
             needsFollowUp: false,
             followUpInDays: 7
         ),
@@ -69,10 +80,10 @@ struct Appointment: Identifiable {
             date: Calendar.current.date(byAdding: .day, value: -90, to: Date())!,
             treatmentType: .cleaning,
             isCompleted: true,
-            doctorName: "Dr. Emma Williams",
-            location: "Main Dental Clinic, Floor 2",
-            notes: "Please arrive 15 minutes before your appointment time. Remember to bring your insurance card and ID.",
-            treatmentNotes: "Full dental cleaning performed. Tartar and plaque removed. Teeth polished.",
+            doctorName: "Dr. Ana Sousa",
+            location: "Clínica Dental Principal, Piso 2",
+            notes: "Por favor, chegue 15 minutos antes da hora marcada. Lembre-se de trazer o seu cartão de seguro e identificação.",
+            treatmentNotes: "Limpeza dentária completa realizada. Tártaro e placa removidos. Dentes polidos.",
             needsFollowUp: true,
             followUpInDays: 180
         )
@@ -96,17 +107,17 @@ struct Appointment: Identifiable {
     static func getTreatmentNotes(for treatmentType: TreatmentType) -> String {
         switch treatmentType {
         case .checkup:
-            return "Regular dental checkup completed. No cavities found. Good oral hygiene maintained."
+            return NSLocalizedString("Regular dental checkup completed. No cavities found. Good oral hygiene maintained.", comment: "Treatment notes")
         case .cleaning:
-            return "Full dental cleaning performed. Tartar and plaque removed. Teeth polished."
+            return NSLocalizedString("Full dental cleaning performed. Tartar and plaque removed. Teeth polished.", comment: "Treatment notes")
         case .filling:
-            return "Filling performed on upper right molar. Composite material used. Patient tolerated procedure well."
+            return NSLocalizedString("Filling performed on upper right molar. Composite material used. Patient tolerated procedure well.", comment: "Treatment notes")
         case .rootCanal:
-            return "Root canal therapy completed on lower left premolar. Canal sealed. Temporary crown placed."
+            return NSLocalizedString("Root canal therapy completed on lower left premolar. Canal sealed. Temporary crown placed.", comment: "Treatment notes")
         case .extraction:
-            return "Extraction of wisdom tooth completed. No complications during procedure. Post-operative care instructions provided."
+            return NSLocalizedString("Extraction of wisdom tooth completed. No complications during procedure. Post-operative care instructions provided.", comment: "Treatment notes")
         case .consultation:
-            return "Initial consultation for orthodontic treatment. Discussed treatment options and costs."
+            return NSLocalizedString("Initial consultation for orthodontic treatment. Discussed treatment options and costs.", comment: "Treatment notes")
         }
     }
     

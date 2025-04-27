@@ -66,7 +66,7 @@ struct RescheduleAppointmentView: View {
         .alert(isPresented: $showingConfirmation) {
             Alert(
                 title: Text(NSLocalizedString("Appointment Rescheduled!", comment: "Alert title")),
-                message: Text(String(format: NSLocalizedString("Your %@ appointment has been rescheduled for %@", comment: "Alert message"), selectedTreatment.rawValue, formattedDateTime)),
+                message: Text(String(format: NSLocalizedString("Your %@ appointment has been rescheduled for %@", comment: "Alert message"), selectedTreatment.localizedName, formattedDateTime)),
                 dismissButton: .default(Text(NSLocalizedString("OK", comment: "Alert button"))) {
                     // Dismiss both the reschedule view and the detail view
                     dismiss()
@@ -96,7 +96,7 @@ struct RescheduleAppointmentView: View {
                 Image(systemName: iconName(for: selectedTreatment))
                     .foregroundColor(ColorTheme.primary)
                     .accessibility(hidden: true)
-                Text(selectedTreatment.rawValue)
+                Text(selectedTreatment.localizedName)
                     .foregroundColor(.primary)
                 Spacer()
             }
@@ -107,7 +107,7 @@ struct RescheduleAppointmentView: View {
             )
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), selectedTreatment.rawValue))
+            .accessibilityLabel(String(format: NSLocalizedString("Treatment type: %@", comment: "Accessibility label"), selectedTreatment.localizedName))
         }
     }
     

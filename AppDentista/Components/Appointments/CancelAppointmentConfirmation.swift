@@ -122,7 +122,7 @@ struct CancelAppointmentConfirmation: View {
             detailRow(
                 icon: "stethoscope", 
                 title: NSLocalizedString("Treatment", comment: "Detail label"), 
-                value: appointment.treatmentType.rawValue
+                value: appointment.treatmentType.localizedName
             )
         }
         .padding()

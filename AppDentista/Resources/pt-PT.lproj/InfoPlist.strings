@@ -1,0 +1,12 @@
+/* App display name */
+"CFBundleDisplayName" = "Dentista";
+
+/* App description */
+"NSHumanReadableCopyright" = "© 2025 João Morais. Todos os direitos reservados.";
+
+/* Privacy descriptions */
+"NSCalendarsUsageDescription" = "Esta app precisa de acesso ao seu calendário para agendar consultas.";
+"NSCameraUsageDescription" = "Esta app precisa de acesso à sua câmara para adicionar fotos ao seu perfil.";
+"NSPhotoLibraryUsageDescription" = "Esta app precisa de acesso às suas fotos para adicionar imagens ao seu perfil.";
+"NSLocationWhenInUseUsageDescription" = "Esta app utiliza a sua localização para fornecer direções para a clínica.";
+"NSContactsUsageDescription" = "Esta app precisa de acesso aos seus contactos para adicionar contactos de emergência."; 

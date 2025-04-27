@@ -12,7 +12,7 @@ struct AppointmentHistoryCard: View {
             
             // Info column
             VStack(alignment: .leading, spacing: 6) {
-                Text(appointment.treatmentType.rawValue)
+                Text(appointment.treatmentType.localizedName)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.primary)
                 
@@ -37,7 +37,7 @@ struct AppointmentHistoryCard: View {
         .background(CardStyle.apply(to: Color.clear))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel ?? 
-            NSLocalizedString("Past appointment for \(appointment.treatmentType.rawValue) with \(appointment.doctorName) on \(appointment.date.formatted(date: .long, time: .shortened)). Completed.", 
+            NSLocalizedString("Past appointment for \(appointment.treatmentType.localizedName) with \(appointment.doctorName) on \(appointment.date.formatted(date: .long, time: .shortened)). Completed.", 
                               comment: "Card accessibility label")
         )
         .accessibilityHint(accessibilityHint ?? NSLocalizedString("Tap to view details", comment: "Card accessibility hint"))
